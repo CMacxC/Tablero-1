@@ -9,10 +9,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
+import tablero1.event.EventMenuSelected;
 import tablero1.model.Model_Menu;
 
 public class Menu extends javax.swing.JPanel {
 
+    private EventMenuSelected event;
+    
+    public void addEventMenuSelected(EventMenuSelected event)
+    {
+        this.event = event;
+        list_Menu1.addEventMenuSelected(event);
+    }
+    
     public Menu() {
         initComponents();
         setOpaque(false);
