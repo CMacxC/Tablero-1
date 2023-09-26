@@ -3,6 +3,7 @@ package tablero1.Swing;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -14,6 +15,7 @@ public class List_Menu <E extends Object> extends JList<E>{
     
     private final DefaultListModel model;
     private int selectedIndex = -1;
+    private int overIndex = -1;
     
     public List_Menu()
     {
@@ -43,6 +45,35 @@ public class List_Menu <E extends Object> extends JList<E>{
                     repaint();
                 }
             }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                overIndex = -1;
+                repaint();
+            }
+        });
+        addMouseMotionListener(new MouseMotionAdapter(){
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int index = locationToIndex(e.getPoint());
+                if(index != overIndex)
+                {
+                    Object o = model.getElementAt(index);
+                    if(o instanceof Model_Menu)
+                    {
+                        Model_Menu menu = (Model_Menu) o;
+                        if(menu.getType() == Model_Menu.MenuType.MENU)
+                        {
+                            overIndex = index;
+                        }
+                        else
+                        {
+                            overIndex =  -1;
+                        }
+                        repaint();
+                    }
+                }
+            }
         });
     }
 
@@ -64,6 +95,7 @@ public class List_Menu <E extends Object> extends JList<E>{
                 
                 Menu_Item item = new Menu_Item(data);
                 item.setSelected(selectedIndex == index);
+                item.setOver(overIndex == index);
                 return  item;
             }
         };
